@@ -58,14 +58,14 @@ def matcher(match_string):
 
 # This is pretty arbitrary. I'm choosing, for no real reason, the length of
 # a subscription.
-_RETRIES = 1801/60
+_RETRIES = 3
 
 
 def get_retries():
     return _RETRIES
 
 
-def retry_with_delay(f, delay=60):
+def retry_with_delay(f, delay=1):
     """
     Retry the wrapped requests.request function in case of ConnectionError.
     Optionally limit the number of retries or set the delay between retries.
@@ -79,6 +79,7 @@ def retry_with_delay(f, delay=60):
             try:
                 return f(*args, **kwargs)
             except requests.ConnectionError:
+		print "Connection error."
                 if not remaining:
                     raise
                 gevent.sleep(delay)
